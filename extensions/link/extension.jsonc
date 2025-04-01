@@ -1,0 +1,17 @@
+{
+	"name": "link",
+	"version": "1.0.0",
+	"output": "build", // This is where the `extension.wasm` and `extension.wasm.sha` (the SHA256 hash) will be placed
+	"scopes": ["runtime"], // this can also be "background"
+	"targets": ["link"], // This can be any of the inferrable entry type, "other", or "*" for all
+	"privileges": [
+		{
+			"capability": "host:entries:update",
+			"description": "Update the entry's content with converted Markdown"
+		},
+		{
+			"capability": "host:chunks:create",
+			"description": "Create chunks for the entry's content"
+		}
+	]
+}

@@ -1,0 +1,13 @@
+{
+	"name": "pdf",
+	"version": "1.0.0",
+	"output": "build", // This is where the `extension.wasm` and `extension.wasm.sha` (the SHA256 hash) will be placed
+	"scopes": ["runtime"], // this can also be "background"
+	"targets": ["pdf"], // This can be any of the inferrable entry type, "other", or "*" for all
+	"privileges": [
+		{
+			"capability": "host:convert:pdf",
+			"description": "To convert PDFs to text"
+		}
+	]
+}
