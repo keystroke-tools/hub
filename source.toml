@@ -1,5 +1,5 @@
 name = "core"
 author = "Keystroke"
 description = "The core plugins for Hubble"
-plugins = ["./extensions/pdf", "./extensions/link/"]
+plugins = ["./pdf", "./link"]
 versioning-strategy = "latest-commit"
