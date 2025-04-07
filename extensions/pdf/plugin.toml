@@ -1,0 +1,4 @@
+name = "pdf"
+description = "Process PDF files and extract text"
+mode = "on_create"
+entry_types = ["pdf"]
