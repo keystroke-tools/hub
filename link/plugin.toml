@@ -1,12 +1,12 @@
 name = "link"
 description = "Fetch and process links"
 mode = "on_create"
-entry_types = ["link"]
+targets = ["link"]
 
 [[privileges]]
-name = "host:entries:update"
+identifier = "host:entries:update"
 description = "Update the entry's content with the parsed Markdown"
 
 [[privileges]]
-name = "host:chunks:create"
+identifier = "host:chunks:create"
 description = "Create chunks for the entry's content"
