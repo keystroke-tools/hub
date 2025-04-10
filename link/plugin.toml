@@ -1,6 +1,6 @@
 name = "link"
 description = "Fetch and process links"
-mode = "on_create"
+modes = ["on_create"]
 targets = ["link"]
 
 [[privileges]]
