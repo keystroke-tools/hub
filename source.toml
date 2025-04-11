@@ -1,5 +1,6 @@
 name = "core"
 author = "Keystroke"
 description = "The core plugins for Hubble"
+url = "https://github.com/keystroke-tools/hub.git"
 plugins = ["./pdf", "./link"]
 versioning-strategy = "commit"
