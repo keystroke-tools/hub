@@ -1,4 +1,4 @@
-name = "pdf"
-description = "Process PDF files and extract text"
+name = "PDF"
+description = "Process PDF entries, convert content to Markdown, and extract text."
 modes = ["on_create"]
 targets = ["pdf"]

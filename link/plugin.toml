@@ -1,5 +1,5 @@
-name = "link"
-description = "Fetch and process links"
+name = "Link"
+description = "Convert URL content to Markdown and extract text."
 modes = ["on_create"]
 targets = ["link"]
 
