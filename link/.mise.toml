@@ -3,7 +3,8 @@ rust = { version = "1.86.0" }
 
 [tasks.build]
 dir = "."
-depends = ["build:wasm", "generate:checksum"]
+depends = ["build:wasm"]
+depends_post = ["generate:checksum"]
 run = ["rm output/{*.js,*.d.ts,package.json,README.md,.gitignore}"]
 
 [tasks."build:wasm"]
