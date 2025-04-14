@@ -13,3 +13,8 @@ pub fn greet() {
     alert("Hello, link!");
     log("Hello, world!");
 }
+
+#[wasm_bindgen]
+pub fn on_create(_ptr: u32, _len: u32) {
+    unimplemented!("on_create")
+}
