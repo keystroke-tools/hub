@@ -14,3 +14,10 @@ run = "wasm-pack build --release -d output --out-name plugin.wasm"
 [tasks."generate:checksum"]
 dir = "output"
 run = "sha256sum -b plugin.wasm | cut -d' ' -f1 | tr -d '\n' > plugin.wasm.sha256"
+
+[tasks."update:submodules"]
+dir = "."
+run = [
+	"git submodule update --init --recursive",
+	"git submodule foreach git pull origin master",
+]

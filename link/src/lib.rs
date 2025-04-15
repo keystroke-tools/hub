@@ -16,5 +16,5 @@ pub fn greet() {
 
 #[wasm_bindgen]
 pub fn on_create(_ptr: u32, _len: u32) {
-    unimplemented!("on_create")
+    println!("called `on_create`");
 }
