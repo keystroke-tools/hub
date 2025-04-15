@@ -17,10 +17,10 @@ capnpc = "0.21.0"
 # Below settings dramatically reduce wasm output size
 # See https://rustwasm.github.io/book/reference/code-size.html#optimizing-builds-for-code-sizewasm-opt -Oz -o
 # See https://doc.rust-lang.org/cargo/reference/profiles.html#codegen-units
-# [profile.release]
-# opt-level = "z"
-# lto = true
-# codegen-units = 1
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
 
 [target.wasm32-unknown-unknown]
 # This is the default target for wasm32
