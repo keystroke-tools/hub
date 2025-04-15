@@ -38,3 +38,20 @@ pub unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
 pub unsafe fn string_to_ptr(s: &str) -> (u32, u32) {
     (s.as_ptr() as u32, s.len() as u32)
 }
+
+/// WebAssembly export that allocates a pointer (linear memory offset) that can
+/// be used for a string.
+///
+/// This is an ownership transfer, which means the caller must call
+/// [`deallocate`] when finished.
+#[cfg_attr(all(target_arch = "wasm32"), unsafe(export_name = "allocate"))]
+pub extern "C" fn _allocate(size: u32) -> *mut u8 {
+    allocate(size as usize)
+}
+
+/// WebAssembly export that deallocates a pointer of the given size (linear
+/// memory offset, byteCount) allocated by [`allocate`].
+#[cfg_attr(all(target_arch = "wasm32"), unsafe(export_name = "deallocate"))]
+pub unsafe extern "C" fn _deallocate(ptr: u32, size: u32) {
+    unsafe { deallocate(ptr as *mut u8, size as usize) };
+}
