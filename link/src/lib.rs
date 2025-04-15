@@ -45,9 +45,9 @@ fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
         .map_err(Error::Capnp)?;
 
     let id = capnp_str!(entry.get_id());
-    let name = capnp_str!(entry.get_name());
+    let url = capnp_str!(entry.get_url());
 
-    debug(&format!("entry {{ id: {}, name: {} }}", id, name,));
+    debug(&format!("Entry {{ id: {}, url: {} }}", id, url));
     Ok(())
 }
 

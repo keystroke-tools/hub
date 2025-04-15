@@ -4,9 +4,9 @@ modes = ["on_create"]
 targets = ["link"]
 
 [[privileges]]
-identifier = "host:entries:update"
+identifier = "entries::update"
 description = "Update the entry's content with the parsed Markdown"
 
 [[privileges]]
-identifier = "host:chunks:create"
+identifier = "chunks::create"
 description = "Create chunks for the entry's content"
