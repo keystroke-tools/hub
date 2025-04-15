@@ -3,6 +3,12 @@ pub mod entry_capnp {
     include!(concat!(env!("OUT_DIR"), "/entry_capnp.rs"));
 }
 
+macro_rules! capnp_str {
+    ($expr:expr) => {
+        $expr.map_err(Error::Capnp)?.to_str().map_err(Error::Utf8)?
+    };
+}
+
 #[derive(Debug)]
 enum Error {
     Capnp(capnp::Error),
@@ -16,12 +22,6 @@ unsafe extern "C" {
 
     #[link_name = "error"]
     fn _error(ptr: u32, size: u32);
-}
-
-macro_rules! capnp_str {
-    ($expr:expr) => {
-        $expr.map_err(Error::Capnp)?.to_str().map_err(Error::Utf8)?
-    };
 }
 
 fn debug(s: &str) {
@@ -49,7 +49,7 @@ fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
     let id = capnp_str!(entry.get_id());
     let name = capnp_str!(entry.get_name());
 
-    debug(&format!("Received entry: {{ id: {}, name: {} }}", id, name));
+    debug(&format!("entry {id} created with name {name}"));
     Ok(())
 }
 
