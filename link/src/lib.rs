@@ -44,10 +44,10 @@ fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
         .get_root::<entry_capnp::entry::Reader>()
         .map_err(Error::Capnp)?;
 
-    let id = capnp_str!(entry.get_id());
+    let name = capnp_str!(entry.get_name());
     let url = capnp_str!(entry.get_url());
 
-    debug(&format!("Entry {{ id: {}, url: {} }}", id, url));
+    debug(&format!("Entry {{ name: {}, url: {} }}", name, url));
     Ok(())
 }
 

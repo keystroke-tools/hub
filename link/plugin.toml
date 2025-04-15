@@ -4,6 +4,14 @@ modes = ["on_create"]
 targets = ["link"]
 
 [[privileges]]
+identifier = "log::debug"
+description = "Log debug information"
+
+[[privileges]]
+identifier = "log::error"
+description = "Log error information"
+
+[[privileges]]
 identifier = "entries::update"
 description = "Update the entry's content with the parsed Markdown"
 
