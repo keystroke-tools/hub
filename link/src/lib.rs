@@ -49,7 +49,12 @@ fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
     let id = capnp_str!(entry.get_id());
     let name = capnp_str!(entry.get_name());
 
-    debug(&format!("entry {{ id: {}, name: {} }}", id, name));
+    debug(&format!(
+        "entry {{ id: {}, name: {}, has_name: {} }}",
+        id,
+        name,
+        entry.has_name()
+    ));
     Ok(())
 }
 
