@@ -55,3 +55,11 @@ pub extern "C" fn _allocate(size: u32) -> *mut u8 {
 pub unsafe extern "C" fn _deallocate(ptr: u32, size: u32) {
     unsafe { deallocate(ptr as *mut u8, size as usize) };
 }
+
+/// Reads a pointer and length from an encoded u64 value.
+/// Format: the upper 32 bits represent the pointer, and the lower 32 bits represent the length
+pub fn read_ptr_len(encoded: u64) -> (u32, u32) {
+    let ptr = (encoded >> 32) as u32;
+    let len = (encoded & 0xFFFFFFFF) as u32;
+    (ptr, len)
+}

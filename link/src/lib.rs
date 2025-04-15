@@ -25,6 +25,9 @@ unsafe extern "C" {
 
     #[link_name = "chunk_with_overlap"]
     fn _chunk_with_overlap(ptr: u32, size: u32) -> u64;
+
+    #[link_name = "chunk_by_sentence"]
+    fn _chunk_by_sentence(ptr: u32, size: u32) -> u64;
 }
 
 fn debug(s: &str) {
@@ -37,9 +40,48 @@ fn error(s: &str) {
     unsafe { _error(ptr, size) };
 }
 
-fn chunk_with_overlap(s: &str) {
+macro_rules! read_chunk_result {
+    ($ptr:expr, $size:expr) => {{
+        let slice = unsafe { core::slice::from_raw_parts($ptr as *const u8, $size as usize) };
+        let mut cursor = std::io::Cursor::new(slice);
+        let message =
+            capnp::serialize::read_message(&mut cursor, capnp::message::ReaderOptions::new())
+                .map_err(Error::Capnp)?;
+
+        let chunk_result = message
+            .get_root::<entry_capnp::chunk_result::Reader>()
+            .map_err(Error::Capnp)?;
+
+        let chunks_reader = chunk_result.get_chunks().map_err(Error::Capnp)?;
+
+        let mut chunks = Vec::new();
+        for i in 0..chunks_reader.len() {
+            let chunk = capnp_str!(chunks_reader.get(i));
+            chunks.push(chunk.to_string());
+        }
+
+        Ok(chunks)
+    }};
+}
+
+/// Chunks the input string into smaller pieces with overlap (to retain context).
+fn chunk_with_overlap(s: &str) -> Result<Vec<String>, Error> {
     let (ptr, size) = unsafe { allocator::string_to_ptr(s) };
-    let _chunk = unsafe { _chunk_with_overlap(ptr, size) };
+    let chunks = unsafe { _chunk_with_overlap(ptr, size) };
+
+    let (out_ptr, out_size) = allocator::read_ptr_len(chunks);
+
+    read_chunk_result!(out_ptr, out_size)
+}
+
+/// Chunks the input string into smaller pieces by sentence.
+fn chunk_by_sentence(s: &str) -> Result<Vec<String>, Error> {
+    let (ptr, size) = unsafe { allocator::string_to_ptr(s) };
+    let chunks = unsafe { _chunk_by_sentence(ptr, size) };
+
+    let (out_ptr, out_size) = allocator::read_ptr_len(chunks);
+
+    read_chunk_result!(out_ptr, out_size)
 }
 
 fn on_create(ptr: u32, len: u32) -> Result<(), Error> {

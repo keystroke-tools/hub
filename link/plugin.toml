@@ -18,3 +18,7 @@ description = "Update the entry's content with the parsed Markdown"
 [[privileges]]
 identifier = "chunks::create"
 description = "Create chunks for the entry's content"
+
+[[privileges]]
+identifier = "chunks::with_overlap"
+description = "Create chunks for the entry's content with overlap"
