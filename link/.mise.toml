@@ -5,11 +5,13 @@ rust = { version = "1.86.0" }
 dir = "."
 depends = ["build:wasm"]
 depends_post = ["generate:checksum"]
-run = ["rm output/{*.js,*.d.ts,package.json,README.md,.gitignore}"]
+run = [
+	"mv ./target/wasm32-unknown-unknown/release/link.wasm ./output/plugin.wasm",
+]
 
 [tasks."build:wasm"]
 dir = "."
-run = "wasm-pack build --release -d output --out-name plugin.wasm"
+run = "cargo build --release --target wasm32-unknown-unknown"
 
 [tasks."generate:checksum"]
 dir = "output"
