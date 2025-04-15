@@ -18,20 +18,28 @@ enum Error {
 #[link(wasm_import_module = "env")]
 unsafe extern "C" {
     #[link_name = "debug"]
-    fn _debug(ptr: u32, size: u32);
+    fn _debug(ptr: u32, size: u32) -> u64;
 
     #[link_name = "error"]
-    fn _error(ptr: u32, size: u32);
+    fn _error(ptr: u32, size: u32) -> u64;
+
+    #[link_name = "chunk_with_overlap"]
+    fn _chunk_with_overlap(ptr: u32, size: u32) -> u64;
 }
 
 fn debug(s: &str) {
     let (ptr, size) = unsafe { allocator::string_to_ptr(s) };
-    unsafe { _debug(ptr, size) }
+    unsafe { _debug(ptr, size) };
 }
 
 fn error(s: &str) {
     let (ptr, size) = unsafe { allocator::string_to_ptr(s) };
-    unsafe { _error(ptr, size) }
+    unsafe { _error(ptr, size) };
+}
+
+fn chunk_with_overlap(s: &str) {
+    let (ptr, size) = unsafe { allocator::string_to_ptr(s) };
+    let _chunk = unsafe { _chunk_with_overlap(ptr, size) };
 }
 
 fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
