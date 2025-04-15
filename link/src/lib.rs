@@ -35,8 +35,6 @@ fn error(s: &str) {
 }
 
 fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
-    debug("on_create called");
-
     // Read the Cap'n Proto message from the provided pointer and length.
     let buf: &[u8] = unsafe { core::slice::from_raw_parts(ptr as *const u8, len as usize) };
     let segments = &[buf];
@@ -51,7 +49,7 @@ fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
     let id = capnp_str!(entry.get_id());
     let name = capnp_str!(entry.get_name());
 
-    debug(name);
+    debug(&format!("entry {{ id: {}, name: {} }}", id, name));
     Ok(())
 }
 
