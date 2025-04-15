@@ -36,15 +36,22 @@ fn error(s: &str) {
 
 fn on_create(ptr: u32, len: u32) -> Result<(), Error> {
     // Read the Cap'n Proto message from the provided pointer and length.
-    let buf: &[u8] = unsafe { core::slice::from_raw_parts(ptr as *const u8, len as usize) };
-    let segments = &[buf];
-    let message = capnp::message::Reader::new(
-        capnp::message::SegmentArray::new(segments),
-        core::default::Default::default(),
-    );
+    // let buf: &[u8] = unsafe { core::slice::from_raw_parts(ptr as *const u8, len as usize) };
+    // let segments = &[buf];
+    // let message = capnp::message::Reader::new(
+    //     capnp::message::SegmentArray::new(segments),
+    //     core::default::Default::default(),
+    // );
+    let slice = unsafe { core::slice::from_raw_parts(ptr as *const u8, len as usize) };
+    let mut cursor = std::io::Cursor::new(slice);
+    let message = capnp::serialize::read_message(&mut cursor, capnp::message::ReaderOptions::new())
+        .map_err(Error::Capnp)?;
     let entry = message
         .get_root::<entry_capnp::entry::Reader>()
         .map_err(Error::Capnp)?;
+    // let entry = message
+    //     .get_root::<entry_capnp::entry::Reader>()
+    //     .map_err(Error::Capnp)?;
 
     let id = capnp_str!(entry.get_id());
     let name = capnp_str!(entry.get_name());
