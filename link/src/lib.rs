@@ -1,4 +1,3 @@
-
 use hubble::{error::Error, types};
 
 /// The main function for the `on_create` event.
@@ -20,10 +19,16 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) {
 }
 
 fn on_create(entry: types::Entry) -> Result<(), Error> {
-    let parsed_url = url::Url::parse(&entry.url).map_err(|e| Error::PluginError(e.to_string()))?;
-    let markdown = hubble::transform::url_to_markdown(parsed_url.as_ref());
+    let markdown = hubble::transform::url_to_markdown(entry.url.as_ref())
+        .map_err(|e| Error::PluginError(format!("Error converting URL to markdown: {}", e)))?;
+    let chunks = hubble::transform::chunk_with_overlap(markdown.as_ref())
+        .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
-    hubble::log::debug(&format!("Markdown: {:?}", markdown));
+    hubble::log::debug(&format!(
+        "URL: {:?}, chunks_count: {}",
+        entry.url,
+        chunks.len()
+    ));
 
     Ok(())
 }
