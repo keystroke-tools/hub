@@ -20,9 +20,9 @@ identifier = "chunks::create"
 description = "Create chunks for the entry's content"
 
 [[privileges]]
-identifier = "chunks::with_overlap"
+identifier = "transform::chunk_with_overlap"
 description = "Create chunks for the entry's content with overlap"
 
 [[privileges]]
-identifier = "network::request"
-description = "Make network requests to fetch content from URLs"
+identifier = "transform::url_to_markdown"
+description = "Transform a link's content to Markdown"

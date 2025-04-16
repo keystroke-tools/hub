@@ -1,6 +1,4 @@
-use std::collections::HashMap;
 
-use dom_smoothie::{Article, Config, Readability, TextMode};
 use hubble::{error::Error, types};
 
 /// The main function for the `on_create` event.
@@ -23,43 +21,9 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) {
 
 fn on_create(entry: types::Entry) -> Result<(), Error> {
     let parsed_url = url::Url::parse(&entry.url).map_err(|e| Error::PluginError(e.to_string()))?;
-    let host = parsed_url
-        .host_str()
-        .ok_or_else(|| Error::PluginError("Invalid domain".to_string()))?;
-    let scheme = parsed_url.scheme();
-    let base_url = format!("{}://{}", scheme, host);
+    let markdown = hubble::transform::url_to_markdown(parsed_url.as_ref());
 
-    let cfg = Config {
-        max_elements_to_parse: 10_000,
-        text_mode: TextMode::Markdown,
-        ..Default::default()
-    };
+    hubble::log::debug(&format!("Markdown: {:?}", markdown));
 
-    let mut headers = HashMap::new();
-    headers.insert("User-Agent".to_string(), "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15".to_string());
-    let resp = hubble::request(types::RequestOpts {
-        method: types::NetworkMethod::Get,
-        url: entry.url.clone(),
-        headers: Some(headers),
-        body: None,
-    })?;
-
-    // Convert vector to string
-    let body = String::from_utf8(resp.body).map_err(|e| Error::PluginError(e.to_string()))?;
-
-    let mut readability = Readability::new(body, Some(&base_url), Some(cfg))
-        .map_err(|e| Error::PluginError(e.to_string()))?;
-
-    let article: Article = readability
-        .parse()
-        .map_err(|e| Error::PluginError(format!("Failed to parse article: {}", e)))?;
-
-    // Read the Cap'n Proto message from the provided pointer and length.
-    hubble::log::debug(&format!(
-        "Entry {{ title: {}, byline: {}, content: {} }}",
-        article.title,
-        article.byline.unwrap_or_default(),
-        article.text_content
-    ));
     Ok(())
 }
