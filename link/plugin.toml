@@ -22,3 +22,7 @@ description = "Create chunks for the entry's content"
 [[privileges]]
 identifier = "chunks::with_overlap"
 description = "Create chunks for the entry's content with overlap"
+
+[[privileges]]
+identifier = "network::request"
+description = "Make network requests to fetch content from URLs"
