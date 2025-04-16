@@ -21,9 +21,11 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) {
 
 fn on_create(entry: entry::Entry) -> Result<(), Error> {
     let parsed_url = url::Url::parse(&entry.url).map_err(|e| Error::PluginError(e.to_string()))?;
-    let base_url = parsed_url
+    let host = parsed_url
         .host_str()
         .ok_or_else(|| Error::PluginError("Invalid domain".to_string()))?;
+    let scheme = parsed_url.scheme();
+    let base_url = format!("{}://{}", scheme, host);
 
     // let mut readability = Readability::new(html, document_url, cfg)
 
