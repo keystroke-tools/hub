@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use dom_smoothie::{Article, Config, Readability, TextMode};
 use hubble::{error::Error, types};
 
@@ -33,12 +35,15 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         ..Default::default()
     };
 
+    let mut headers = HashMap::new();
+    headers.insert("User-Agent".to_string(), "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Safari/605.1.15".to_string());
     let resp = hubble::request(types::RequestOpts {
         method: types::NetworkMethod::Get,
         url: entry.url.clone(),
-        headers: None,
+        headers: Some(headers),
         body: None,
     })?;
+
     // Convert vector to string
     let body = String::from_utf8(resp.body).map_err(|e| Error::PluginError(e.to_string()))?;
 
