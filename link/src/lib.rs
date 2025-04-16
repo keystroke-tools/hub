@@ -29,7 +29,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let scheme = parsed_url.scheme();
     let base_url = format!("{}://{}", scheme, host);
 
-    let _cfg = Config {
+    let cfg = Config {
         max_elements_to_parse: 10_000,
         text_mode: TextMode::Markdown,
         ..Default::default()
@@ -47,23 +47,19 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     // Convert vector to string
     let body = String::from_utf8(resp.body).map_err(|e| Error::PluginError(e.to_string()))?;
 
-    hubble::log::debug(&format!(
-        "Response: {{ base_url: {}, code: {}, body: {} }}",
-        base_url, resp.status_code, body
-    ));
+    let mut readability = Readability::new(body, Some(&base_url), Some(cfg))
+        .map_err(|e| Error::PluginError(e.to_string()))?;
 
-    // let mut readability = Readability::new(html, Some(&base_url), Some(cfg))
-    //     .map_err(|e| Error::PluginError(e.to_string()))?;
-    //
-    // let article: Article = readability
-    //     .parse()
-    //     .map_err(|e| Error::PluginError(format!("Failed to parse article: {}", e)))?;
+    let article: Article = readability
+        .parse()
+        .map_err(|e| Error::PluginError(format!("Failed to parse article: {}", e)))?;
 
     // Read the Cap'n Proto message from the provided pointer and length.
-    // hubble::log::debug(&format!(
-    //     "Entry {{ title: {}, byline: {} }}",
-    //     article.title,
-    //     article.byline.unwrap_or_default()
-    // ));
+    hubble::log::debug(&format!(
+        "Entry {{ title: {}, byline: {}, content: {} }}",
+        article.title,
+        article.byline.unwrap_or_default(),
+        article.text_content
+    ));
     Ok(())
 }
