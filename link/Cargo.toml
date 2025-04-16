@@ -8,11 +8,7 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
-capnp = "0.21.0"
-wee_alloc = "0.4.5"
-
-[build-dependencies]
-capnpc = "0.21.0"
+hubble = { path = "../../hubble-sdk-rs" }
 
 # Below settings dramatically reduce wasm output size
 # See https://rustwasm.github.io/book/reference/code-size.html#optimizing-builds-for-code-sizewasm-opt -Oz -o

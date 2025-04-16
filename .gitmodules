@@ -1,3 +1,0 @@
-[submodule "link/schema"]
-	path = link/schema
-	url = git@github.com:aosasona/hubble-schema.git
