@@ -9,6 +9,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 hubble = { path = "../../hubble-sdk-rs" }
+whatlang = "0.16.4"
 
 # Below settings dramatically reduce wasm output size
 # See https://rustwasm.github.io/book/reference/code-size.html#optimizing-builds-for-code-sizewasm-opt -Oz -o

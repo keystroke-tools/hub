@@ -24,10 +24,13 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let chunks = hubble::transform::chunk_with_overlap(markdown.as_ref())
         .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
+    let language = whatlang::detect_lang(markdown.as_ref()).unwrap_or(whatlang::Lang::Eng);
+
     hubble::log::debug(&format!(
-        "URL: {:?}, chunks_count: {}",
+        "URL: {:?}, Chunks: {}, Language: {}",
         entry.url,
-        chunks.len()
+        chunks.len(),
+        language.to_string()
     ));
 
     Ok(())
