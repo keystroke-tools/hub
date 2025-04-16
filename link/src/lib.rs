@@ -1,5 +1,5 @@
-use hubble::error::Error;
-use hubble::types::entry;
+use dom_smoothie::{Article, Config, Readability, TextMode};
+use hubble::{error::Error, types::entry};
 
 /// The main function for the `on_create` event.
 ///
@@ -20,7 +20,17 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) {
 }
 
 fn on_create(entry: entry::Entry) -> Result<(), Error> {
+    let parsed_url = url::Url::parse(&entry.url).map_err(|e| Error::PluginError(e.to_string()))?;
+    let base_url = parsed_url
+        .host_str()
+        .ok_or_else(|| Error::PluginError("Invalid domain".to_string()))?;
+
+    // let mut readability = Readability::new(html, document_url, cfg)
+
     // Read the Cap'n Proto message from the provided pointer and length.
-    hubble::log::debug(&format!("Entry {{ id: {} }}", entry.id));
+    hubble::log::debug(&format!(
+        "Entry {{ link: {}, base_url: {} }}",
+        entry.url, base_url
+    ));
     Ok(())
 }
