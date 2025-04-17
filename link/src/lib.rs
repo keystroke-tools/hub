@@ -5,16 +5,13 @@ use hubble::{entry, error::Error, transform, types};
 /// ## Safety
 /// This function is marked as `unsafe` because it interacts with "raw" memory pointers.
 #[cfg_attr(all(target_arch = "wasm32"), unsafe(export_name = "on_create"))]
-pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) {
+pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) -> u64 {
     match hubble::types::Entry::read_from_memory(ptr, len) {
-        Ok(entry) => {
-            if let Err(e) = on_create(entry) {
-                hubble::log::error(&format!("Error processing entry: {:?}", e));
-            }
-        }
-        Err(e) => {
-            hubble::log::error(&format!("Error reading entry: {:?}", e));
-        }
+        Ok(entry) => match on_create(entry) {
+            Ok(_) => 0,
+            Err(e) => hubble::write_error(e),
+        },
+        Err(e) => hubble::write_error(e),
     }
 }
 
