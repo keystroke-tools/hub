@@ -1,4 +1,4 @@
-use hubble::{error::Error, types};
+use hubble::{entry, error::Error, transform, types};
 
 /// The main function for the `on_create` event.
 ///
@@ -19,18 +19,36 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) {
 }
 
 fn on_create(entry: types::Entry) -> Result<(), Error> {
-    let markdown = hubble::transform::url_to_markdown(entry.url.as_ref())
+    let markdown = transform::url_to_markdown(entry.url.as_ref())
         .map_err(|e| Error::PluginError(format!("Error converting URL to markdown: {}", e)))?;
-    let chunks = hubble::transform::chunk_with_overlap(markdown.as_ref())
+    let chunks = transform::chunk_with_overlap(markdown.as_ref())
         .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
-    let language = whatlang::detect_lang(markdown.as_ref()).unwrap_or(whatlang::Lang::Eng);
+    let language = whatlang::detect_lang(markdown.as_ref())
+        .unwrap_or(whatlang::Lang::Eng)
+        .to_string()
+        .to_lowercase();
+
+    // Update the entry's content
+    let checksum = hubble::generate_checksum(markdown.as_ref());
+    entry::update(types::UpdateEntryOpts {
+        id: entry.id,
+        name: None,
+        content: Some(markdown),
+        checksum: Some(checksum),
+    })?;
+
+    // TODO: write the chunks to the database
+    let entry_chunks = vec![];
+    entry::create_chunks(types::CreateChunksOpts {
+        chunks: entry_chunks,
+    })?;
 
     hubble::log::debug(&format!(
         "URL: {:?}, Chunks: {}, Language: {}",
         entry.url,
         chunks.len(),
-        language.to_string()
+        language
     ));
 
     Ok(())
