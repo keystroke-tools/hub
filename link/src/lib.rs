@@ -55,15 +55,13 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         });
     }
 
-    entry::create_chunks(types::CreateChunksOpts {
+    let count = entry::create_chunks(types::CreateChunksOpts {
         chunks: entry_chunks,
     })?;
 
     hubble::log::debug(&format!(
-        "URL: {:?}, Chunks: {}, Language: {}",
-        entry.url,
-        chunks.len(),
-        language
+        "Created {} chunks for entry {} with language {}",
+        count, entry.id, language
     ));
 
     Ok(())
