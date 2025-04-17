@@ -32,14 +32,29 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     // Update the entry's content
     let checksum = hubble::generate_checksum(markdown.as_ref());
     entry::update(types::UpdateEntryOpts {
-        id: entry.id,
+        id: entry.id.clone(),
         name: None,
         content: Some(markdown),
         checksum: Some(checksum),
     })?;
 
-    // TODO: write the chunks to the database
-    let entry_chunks = vec![];
+    let mut entry_chunks = vec![];
+
+    for idx in 0..chunks.len() {
+        let chunk = chunks
+            .get(idx)
+            .ok_or_else(|| Error::PluginError("Chunk not found".to_string()))?
+            .to_string();
+
+        entry_chunks.push(types::NewChunk {
+            entry_id: entry.id.clone(),
+            index: idx as i32,
+            minimum_version: 1,
+            content: chunk,
+            language: language.clone(),
+        });
+    }
+
     entry::create_chunks(types::CreateChunksOpts {
         chunks: entry_chunks,
     })?;
