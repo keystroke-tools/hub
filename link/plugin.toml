@@ -26,24 +26,3 @@ description = "Create chunks for the entry's content with overlap"
 [[privileges]]
 identifier = "transform::url_to_markdown"
 description = "Transform a link's content to Markdown"
-
-# TODO: remove
-[[privileges]]
-identifier = "store::get"
-description = "test"
-
-[[privileges]]
-identifier = "store::set"
-description = "test"
-
-[[privileges]]
-identifier = "store::delete"
-description = "test"
-
-[[privileges]]
-identifier = "store::all"
-description = "test"
-
-[[privileges]]
-identifier = "store::clear"
-description = "test"

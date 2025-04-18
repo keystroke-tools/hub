@@ -56,47 +56,10 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         chunks: entry_chunks,
     })?;
 
-    // TODO: remove
-    test_store();
-
     hubble::log::debug(&format!(
-        "Created {} chunks for entry {} with language {}",
+        "{{ \"count\": {}, \"entry_id\": \"{}\", \"language\": \"{}\" }}",
         count, entry.id, language
     ));
 
     Ok(())
-}
-
-fn test_store() {
-    let all = hubble::store::all();
-    hubble::log::debug(&format!("All entries: {:?}", all));
-    assert!(all.is_ok());
-    assert!(all.unwrap() == vec![]);
-
-    let set = hubble::store::set("test", "test_value");
-    hubble::log::debug(&format!("Set entry: {:?}", set));
-    assert!(set.is_ok());
-    assert!(set.unwrap() == "test_value");
-
-    let get = hubble::store::get("test");
-    hubble::log::debug(&format!("Get entry: {:?}", get));
-    assert!(get.is_ok());
-    assert!(get.unwrap() == "test_value");
-
-    let all_after_set = hubble::store::all();
-    hubble::log::debug(&format!("All entries after set: {:?}", all_after_set));
-    assert!(all_after_set.is_ok());
-    assert!(all_after_set.unwrap() == vec![("test".to_string(), "test_value".to_string())]);
-
-    let delete = hubble::store::delete("test");
-    assert!(delete.is_ok());
-
-    let get = hubble::store::get("test");
-    hubble::log::debug(&format!("Get entry after delete: {:?}", get));
-    assert!(get.is_err());
-
-    let _ = hubble::store::set("test_2", "test_value");
-    let _ = hubble::store::clear();
-
-    assert!(hubble::store::get("test_2").is_err());
 }
