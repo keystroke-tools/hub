@@ -89,4 +89,9 @@ fn test_store() {
 
     let get = hubble::store::get("test");
     assert!(get.is_err());
+
+    let _ = hubble::store::set("test_2", "test_value");
+    let _ = hubble::store::clear();
+
+    assert!(hubble::store::get("test_2").is_err());
 }
