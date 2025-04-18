@@ -9,9 +9,9 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) -> u64 {
     match hubble::types::Entry::read_from_memory(ptr, len) {
         Ok(entry) => match on_create(entry) {
             Ok(_) => 0,
-            Err(e) => hubble::write_error(e),
+            Err(e) => e.write_to_host(),
         },
-        Err(e) => hubble::write_error(e),
+        Err(e) => e.write_to_host(),
     }
 }
 
@@ -56,10 +56,37 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         chunks: entry_chunks,
     })?;
 
+    // TODO: remove
+    test_store();
+
     hubble::log::debug(&format!(
         "Created {} chunks for entry {} with language {}",
         count, entry.id, language
     ));
 
     Ok(())
+}
+
+fn test_store() {
+    let all = hubble::store::all();
+    assert!(all.is_ok());
+    assert!(all.unwrap() == vec![]);
+
+    let set = hubble::store::set("test", "test_value");
+    assert!(set.is_ok());
+    assert!(set.unwrap() == "test_value");
+
+    let get = hubble::store::get("test");
+    assert!(get.is_ok());
+    assert!(get.unwrap() == "test_value");
+
+    let all_after_set = hubble::store::all();
+    assert!(all_after_set.is_ok());
+    assert!(all_after_set.unwrap() == vec![("test".to_string(), "test_value".to_string())]);
+
+    let delete = hubble::store::delete("test");
+    assert!(delete.is_ok());
+
+    let get = hubble::store::get("test");
+    assert!(get.is_err());
 }
