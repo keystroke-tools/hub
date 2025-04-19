@@ -32,7 +32,11 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let content = transform::md_to_content(&markdown)?;
     entry::update(types::UpdateEntryOpts {
         id: entry.id.clone(),
-        name: None,
+        name: if entry.name.is_empty() {
+            Some(format!("{} - {}", entry.url, language))
+        } else {
+            None
+        },
         content: Some(content),
         checksum: Some(checksum),
     })?;
