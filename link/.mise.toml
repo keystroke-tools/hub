@@ -6,7 +6,9 @@ dir = "."
 depends = ["build:wasm"]
 depends_post = ["generate:checksum"]
 run = [
-	"mv ./target/wasm32-unknown-unknown/release/link.wasm ./output/plugin.wasm",
+	"mv ./target/wasm32-unknown-unknown/release/link.wasm ./output/pre-opt.wasm",
+	"wasm-opt -Oz ./output/pre-opt.wasm -o ./output/plugin.wasm",
+	"rm ./output/pre-opt.wasm",
 ]
 
 [tasks."build:wasm"]
