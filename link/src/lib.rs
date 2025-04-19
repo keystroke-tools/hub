@@ -16,10 +16,16 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) -> u64 {
 }
 
 fn on_create(entry: types::Entry) -> Result<(), Error> {
+    let name = if entry.name.is_empty() {
+        entry.url.clone()
+    } else {
+        entry.name.clone()
+    };
+
     let markdown = transform::url_to_markdown(entry.url.as_ref())
         .map_err(|e| Error::PluginError(format!("Error converting URL to markdown: {}", e)))?;
 
-    let chunks = transform::chunk_with_overlap(markdown.as_ref())
+    let chunks = transform::chunk_with_overlap(format!("{}\n{}", name, markdown).as_ref())
         .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
     let language = whatlang::detect_lang(markdown.as_ref())
@@ -33,7 +39,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     entry::update(types::UpdateEntryOpts {
         id: entry.id.clone(),
         name: if entry.name.is_empty() {
-            Some(format!("{} - {}", entry.url, language))
+            Some(name)
         } else {
             None
         },
