@@ -18,6 +18,7 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) -> u64 {
 fn on_create(entry: types::Entry) -> Result<(), Error> {
     let markdown = transform::url_to_markdown(entry.url.as_ref())
         .map_err(|e| Error::PluginError(format!("Error converting URL to markdown: {}", e)))?;
+
     let chunks = transform::chunk_with_overlap(markdown.as_ref())
         .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
@@ -28,10 +29,11 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
 
     // Update the entry's content
     let checksum = hubble::generate_checksum(markdown.as_ref());
+    let content = transform::md_to_content(&markdown)?;
     entry::update(types::UpdateEntryOpts {
         id: entry.id.clone(),
         name: None,
-        content: Some(markdown),
+        content: Some(content),
         checksum: Some(checksum),
     })?;
 
