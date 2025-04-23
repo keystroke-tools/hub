@@ -24,7 +24,6 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let name = entry.name;
     let name = name.split('.').next().unwrap_or(&name).to_string();
 
-    hubble::log::debug(&format!("Downloading markdown from {}", entry.url));
     let response = hubble::network::request(RequestOpts {
         method: NetworkMethod::Get,
         url: entry.url.clone(),
@@ -79,7 +78,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     })?;
 
     hubble::log::debug(&format!(
-        "{{ \"count\": {}, \"entry_id\": \"{}\", \"language\": \"english\" }}",
+        "{{ \"type\": \"markdown\" \"count\": {}, \"entry_id\": \"{}\", \"language\": \"english\" }}",
         count, entry.id
     ));
 
