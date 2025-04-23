@@ -22,9 +22,9 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) -> u64 {
 
 fn on_create(entry: types::Entry) -> Result<(), Error> {
     let name = entry.name;
-    // Strip the extension from the name
     let name = name.split('.').next().unwrap_or(&name).to_string();
 
+    hubble::log::debug(&format!("Downloading markdown from {}", entry.url));
     let response = hubble::network::request(RequestOpts {
         method: NetworkMethod::Get,
         url: entry.url.clone(),

@@ -1,5 +1,5 @@
-name = "MD"
-description = "Fetch and process markdown files from the network"
+name = "Markdown"
+description = "Fetch and process markdown files"
 modes = ["on_create"]
 targets = ["markdown"]
 
