@@ -24,5 +24,9 @@ identifier = "chunks::create"
 description = "Create chunks for the entry's content"
 
 [[privileges]]
+identifier = "transform::chunk_with_overlap"
+description = "Create chunks for the entry's content with overlap"
+
+[[privileges]]
 identifier = "network::request"
 description = "Fetch the content from the network"
