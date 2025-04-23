@@ -49,6 +49,11 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let content = transform::md_to_content(&markdown)
         .map_err(|e| Error::PluginError(format!("Failed to convert markdown to content: {}", e)))?;
 
+    let language = whatlang::detect_lang(&content.plain_text)
+        .unwrap_or(whatlang::Lang::Eng)
+        .to_string()
+        .to_lowercase();
+
     entry::update(types::UpdateEntryOpts {
         id: entry.id.to_owned(),
         name: Some(name),
@@ -69,7 +74,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
             index: idx as i32,
             minimum_version: 1,
             content: chunk,
-            language: "english".to_string(), // we will just use english for now
+            language: language.clone(),
         });
     }
 
@@ -78,8 +83,8 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     })?;
 
     hubble::log::debug(&format!(
-        "{{ \"type\": \"markdown\" \"count\": {}, \"entry_id\": \"{}\", \"language\": \"english\" }}",
-        count, entry.id
+        "{{ \"type\": \"markdown\" \"count\": {}, \"entry_id\": \"{}\", \"language\": \"{}\" }}",
+        count, entry.id, language
     ));
 
     Ok(())
