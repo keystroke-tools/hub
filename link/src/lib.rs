@@ -30,7 +30,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let chunks = transform::chunk_with_overlap(&chunkable_content)
         .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
-    let language = whatlang::detect_lang(markdown.as_ref())
+    let language = whatlang::detect_lang(&content.plain_text)
         .unwrap_or(whatlang::Lang::Eng)
         .to_string()
         .to_lowercase();
