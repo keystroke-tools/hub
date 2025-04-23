@@ -2,5 +2,5 @@ name = "Core"
 author = "Keystroke Tools"
 description = "The core plugins for Hubble. These are installed by default and handle some of the built-in functionalities."
 url = "https://github.com/keystroke-tools/hub.git"
-plugins = ["./pdf", "./link"]
+plugins = ["./md", "./link"]
 versioning-strategy = "commit"
