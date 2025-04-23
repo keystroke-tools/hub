@@ -1,5 +1,5 @@
 [package]
-name = "link"
+name = "md"
 version = "0.1.0"
 edition = "2024"
 
@@ -9,7 +9,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 hubble = { path = "../../hubble-sdk-rs" }
-whatlang = "0.16.4"
 
 [target.wasm32-unknown-unknown]
 # This is the default target for wasm32

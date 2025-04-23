@@ -1,0 +1,6 @@
+[tools]
+rust = { version = "1.86.0" }
+
+[tasks.build]
+dir = "."
+run = ["chmod +x ./build.sh", "./build.sh"]

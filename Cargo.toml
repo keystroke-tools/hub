@@ -1,0 +1,11 @@
+[workspace]
+resolver = "2"
+members = ["link", "md"]
+
+# Below settings dramatically reduce wasm output size
+# See https://rustwasm.github.io/book/reference/code-size.html#optimizing-builds-for-code-sizewasm-opt -Oz -o
+# See https://doc.rust-lang.org/cargo/reference/profiles.html#codegen-units
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
