@@ -8,7 +8,7 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
-hubble = { path = "../../hubble-sdk-rs" }
+hubble = { path = "../../sdk" }
 whatlang = "0.16.4"
 
 [target.wasm32-unknown-unknown]
