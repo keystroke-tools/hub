@@ -70,7 +70,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     })?;
 
     hubble::log::debug(&format!(
-        "{{ \"count\": {}, \"entry_id\": \"{}\", \"language\": \"{}\", \"type\": \"on_create\" }}",
+        "{{ \"count\": {}, \"entry_id\": \"{}\", \"language\": \"{}\" }}",
         count, entry.id, language,
     ));
 

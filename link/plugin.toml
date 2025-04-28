@@ -1,7 +1,7 @@
 name = "Link"
 description = "Convert URL content to Markdown and extract text."
 modes = ["on_create"]
-targets = ["link", "html"]
+targets = ["link"]
 
 [[privileges]]
 identifier = "log::debug"
