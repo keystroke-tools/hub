@@ -1,7 +1,7 @@
 use hubble::{
     entry,
     error::Error,
-    transform,
+    language, transform,
     types::{self, NetworkMethod, RequestOpts},
 };
 
@@ -56,11 +56,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         .map_err(|_| Error::PluginError("Failed to convert markdown to chunks".into()))?;
 
     let checksum = hubble::generate_checksum(content.markdown.as_ref());
-
-    let language = whatlang::detect_lang(&content.plain_text)
-        .unwrap_or(whatlang::Lang::Eng)
-        .to_string()
-        .to_lowercase();
+    let language = language::detect_lang(&content.plain_text);
 
     entry::update(types::UpdateEntryOpts {
         id: entry.id.to_owned(),
@@ -82,7 +78,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
             index: idx as i32,
             minimum_version: 1,
             content: chunk,
-            language: language.clone(),
+            language: language.to_string(),
         });
     }
 

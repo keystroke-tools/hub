@@ -1,4 +1,4 @@
-use hubble::{entry, error::Error, transform, types};
+use hubble::{entry, error::Error, language, transform, types};
 
 /// The main function for the `on_create` event.
 ///
@@ -30,13 +30,10 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     let chunks = transform::chunk_with_overlap(&chunkable_content)
         .map_err(|e| Error::PluginError(format!("Error chunking markdown: {}", e)))?;
 
-    let language = whatlang::detect_lang(&content.plain_text)
-        .unwrap_or(whatlang::Lang::Eng)
-        .to_string()
-        .to_lowercase();
+    let checksum = hubble::generate_checksum(markdown.as_ref());
+    let language = language::detect_lang(&content.plain_text);
 
     // Update the entry's content
-    let checksum = hubble::generate_checksum(markdown.as_ref());
     entry::update(types::UpdateEntryOpts {
         id: entry.id.clone(),
         name: if entry.name.is_empty() {
@@ -61,7 +58,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
             index: idx as i32,
             minimum_version: 1,
             content: chunk,
-            language: language.clone(),
+            language: language.to_string(),
         });
     }
 
