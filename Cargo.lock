@@ -149,6 +149,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "marksman"
+version = "0.1.0"
+dependencies = [
+ "hubble",
+ "whatlang",
+]
+
+[[package]]
 name = "md"
 version = "0.1.0"
 dependencies = [
