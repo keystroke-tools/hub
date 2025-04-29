@@ -40,10 +40,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
 
     // Convert the Vec<u8> to a String
     let body = String::from_utf8(response.body).map_err(|e| {
-        Error::PluginError(format!(
-            "Failed to convert response body to String: {}",
-            e.to_string()
-        ))
+        Error::PluginError(format!("Failed to convert response body to String: {}", e))
     })?;
 
     let content = transform::md_to_content(&body)
