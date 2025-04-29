@@ -1,0 +1,32 @@
+name = "Marksman"
+description = "Download and process Mark(down/up) files"
+modes = ["on_create"]
+targets = ["markdown", "html"]
+
+[[privileges]]
+identifier = "log::debug"
+description = "Log debug information"
+
+[[privileges]]
+identifier = "log::error"
+description = "Log error information"
+
+[[privileges]]
+identifier = "log::warn"
+description = "Log warnings"
+
+[[privileges]]
+identifier = "entries::update"
+description = "Update the entry's content with the processed Markdown"
+
+[[privileges]]
+identifier = "chunks::create"
+description = "Create chunks for the entry's content"
+
+[[privileges]]
+identifier = "transform::chunk_with_overlap"
+description = "Create chunks for the entry's content with overlap"
+
+[[privileges]]
+identifier = "network::request"
+description = "Fetch the content from the network"
