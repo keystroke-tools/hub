@@ -132,6 +132,7 @@ dependencies = [
  "pulldown-cmark",
  "sha2",
  "thiserror",
+ "whatlang",
 ]
 
 [[package]]
