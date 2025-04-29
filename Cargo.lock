@@ -126,6 +126,8 @@ dependencies = [
 [[package]]
 name = "hubble"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f7e5887ed90b36a0fa1293c8dc57448716f434c5fca5c43fcbabaff73cb75bc"
 dependencies = [
  "capnp",
  "capnpc",
