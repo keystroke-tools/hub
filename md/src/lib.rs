@@ -22,7 +22,13 @@ pub unsafe extern "C" fn _on_create(ptr: u32, len: u32) -> u64 {
 
 fn on_create(entry: types::Entry) -> Result<(), Error> {
     let name = entry.name;
-    let name = name.split('.').next().unwrap_or(&name).to_string();
+    // Remove the file extension from the name (account for multiple dots)
+    let parts: Vec<&str> = name.split('.').collect();
+    let name = if parts.len() > 1 {
+        parts[..parts.len() - 1].join(".")
+    } else {
+        name.clone()
+    };
 
     let response = hubble::network::request(RequestOpts {
         method: NetworkMethod::Get,
