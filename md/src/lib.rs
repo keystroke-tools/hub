@@ -38,16 +38,21 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         )));
     }
 
-    let raw_data = response.body;
     // Convert the Vec<u8> to a String
-    let markdown = String::from_utf8(raw_data)
-        .map_err(|_| Error::PluginError("Failed to convert response body to String".into()))?;
+    let body = String::from_utf8(response.body).map_err(|e| {
+        Error::PluginError(format!(
+            "Failed to convert response body to String: {}",
+            e.to_string()
+        ))
+    })?;
 
-    let chunks = transform::chunk_with_overlap(&markdown)
-        .map_err(|_| Error::PluginError("Failed to convert markdown to chunks".into()))?;
-    let checksum = hubble::generate_checksum(markdown.as_ref());
-    let content = transform::md_to_content(&markdown)
+    let content = transform::md_to_content(&body)
         .map_err(|e| Error::PluginError(format!("Failed to convert markdown to content: {}", e)))?;
+
+    let chunks = transform::chunk_with_overlap(&format!("{}\n{}", name, content.plain_text))
+        .map_err(|_| Error::PluginError("Failed to convert markdown to chunks".into()))?;
+
+    let checksum = hubble::generate_checksum(content.markdown.as_ref());
 
     let language = whatlang::detect_lang(&content.plain_text)
         .unwrap_or(whatlang::Lang::Eng)
