@@ -63,7 +63,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
         })?,
 
         types::Type::PlainText => types::Content {
-            markdown: body.clone(), // NOTE: we might be able to perf-optimise this later
+            markdown: body.clone(),
             plain_text: body,
         },
 
@@ -114,7 +114,7 @@ fn on_create(entry: types::Entry) -> Result<(), Error> {
     })?;
 
     hubble::log::debug(&format!(
-        "{{ \"type\": \"markdown\" \"count\": {}, \"entry_id\": \"{}\", \"language\": \"{}\", \"type\": \"{}\" }}",
+        "{{ \"type\": \"{}\", \"count\": {}, \"entry_id\": \"{}\", \"language\": \"{}\" }}",
         count, entry.id, language, entry.r#type
     ));
 

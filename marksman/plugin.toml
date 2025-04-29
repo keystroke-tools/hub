@@ -28,5 +28,9 @@ identifier = "transform::chunk_with_overlap"
 description = "Create chunks for the entry's content with overlap"
 
 [[privileges]]
+identifier = "transform::html_to_markdown"
+description = "Convert HTML to Markdown"
+
+[[privileges]]
 identifier = "network::request"
 description = "Fetch the content from the network"
