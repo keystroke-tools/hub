@@ -1,5 +1,5 @@
 name = "Marksman"
-description = "Download and process Mark(down/up) files"
+description = "Download and process Markdown and Markup formats"
 modes = ["on_create"]
 targets = ["markdown", "html"]
 
