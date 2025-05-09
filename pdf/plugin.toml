@@ -2,3 +2,35 @@ name = "PDF"
 description = "Process PDF entries, convert content to Markdown, and extract text."
 modes = ["on_create"]
 targets = ["pdf"]
+
+[[privileges]]
+identifier = "log::debug"
+description = "Log debug information"
+
+[[privileges]]
+identifier = "log::error"
+description = "Log error information"
+
+[[privileges]]
+identifier = "log::warn"
+description = "Log warnings"
+
+[[privileges]]
+identifier = "entries::update"
+description = "Update the entry's content with the processed Markdown"
+
+[[privileges]]
+identifier = "chunks::create"
+description = "Create chunks for the entry's content"
+
+[[privileges]]
+identifier = "transform::chunk_with_overlap"
+description = "Create chunks for the entry's content with overlap"
+
+[[privileges]]
+identifier = "network::request"
+description = "Fetch the PDF content from the store"
+
+[[privileges]]
+identifier = "crypto::rand"
+description = "Generate random bytes for use in digests"
