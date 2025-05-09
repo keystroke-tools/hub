@@ -34,7 +34,3 @@ description = "Convert HTML to Markdown"
 [[privileges]]
 identifier = "network::request"
 description = "Fetch the content from the store"
-
-[[privileges]]
-identifier = "crypto::rand"
-description = "Generate random bytes for use in digests"
